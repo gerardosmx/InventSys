@@ -1,4 +1,4 @@
-namespace InventSys.Models
+namespace InventSys.Modelos.ViewModels
 {
     public class ErrorViewModel
     {

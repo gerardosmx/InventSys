@@ -1,0 +1,94 @@
+﻿@model InventSys.Modelos.ViewModels.MdAlmacen
+@{
+    var titulo = "Actualizar Almacen";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Actualizar</h1>
+
+<form method="post">
+    <div style="padding-left:15%; padding-right:15%; padding-bottom:0.4rem">
+        <div class="row border-0">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        </div>
+        @if(Model.Id != 0)
+        {
+            titulo = "Actualizar Almacen";
+            <input type="hidden" asp-for="Id" id="id" />
+        }
+        <div class="col-12 border-bottom p-0">
+             <h3 class="text-primary">@titulo</h3>
+        </div>
+
+        <div class="row mb-2 mt-2">
+            <div class="form-group col-md-6">
+                
+                <label asp-for="Nombre" class="control-label"></label>
+                <input id="TB_nombre" type="text" asp-for="Nombre" class="form-control" placeholder="Nombre del Almacen" />
+                <span asp-validation-for="Nombre" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="row mb-2 mt-2">
+            <div class="form-group col-md-6">
+
+                <label asp-for="Descrip" class="control-label">Descripción</label>
+                <input type="text" asp-for="Descrip" class="form-control" placeholder="Descripción del Almacen" />
+                <span asp-validation-for="Descrip" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row mb-2 mt-2">
+            <div class="form-group col-md-6">
+
+                <label asp-for="Direccion" class="control-label">Domicilio</label>
+                <input type="text" asp-for="Direccion" class="form-control" placeholder="Domicilio del almacén" />
+                <span asp-validation-for="Direccion" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row mb-2 mt-2">
+            <div class="form-group col-md-6">
+
+                <label asp-for="Estado" class="control-label">Estatus</label>
+                <select asp-for="Estado" class="form-select">
+                    <option value="true">Activo</option>
+                    <option value="false">Inactivo</option>
+                </select>
+                <span asp-validation-for="Estado" class="text-danger"></span>
+            </div>
+        </div>
+        <br />
+        @if(Model.Id != 0)
+        {
+            <partial name="_BarraBotones_Act_Regresar" model="Model.Id" />
+        }
+        else
+        {
+            <partial name="_BarraBotones_Crear_Regresar" />
+        }
+    </div>
+</form>
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        $("#TB_nombre").on("change", function () {validarNombre();});
+
+       
+        function validarNombre() {
+
+            var url = '@Url.Content("~/Admin/Almacen/ValidarNombre")';   
+               
+            var $id = "#id";
+            var $nombre = "#TB_nombre";
+            $.getJSON(url, { id: $($id).val(), nombre: $($nombre).val() }, function (data) {
+                $.each(data, function (key, value) {
+                    if (value) {
+                        var nom = $($nombre);
+                        swal("Error", "El nombre ya existe","error");
+                        nom.value = "";
+                    }
+                });
+            });
+         }
+    </script>
+}
